@@ -31,10 +31,37 @@ public class RunScript {
 		GroovyShell groovyShell = new GroovyShell();
 		
 		try {
-			
-			//System.out.println(script.getAbsolutePath());
+			try {
+			groovyShell.parse(script).invokeMethod("setup", null);
+			}catch(Exception e)
+			{
+				String name = e.getClass().getName();
+				if(name.equals("org.codehaus.groovy.runtime.metaclass.MissingMethodExceptionNoStack"))
+				{
+					// do nothing
+				}else
+				{
+					Assert.fail("setup() failed:" + e.toString());
+				}
+				
+			}
 			
 			groovyShell.evaluate(script);
+			
+			try {
+				groovyShell.parse(script).invokeMethod("teardown", null);
+				}catch(Exception e)
+				{
+					String name = e.getClass().getName();
+					if(name.equals("org.codehaus.groovy.runtime.metaclass.MissingMethodExceptionNoStack"))
+					{
+						// do nothing
+					}else
+					{
+						Assert.fail("teardown() failed:" + e.toString());
+					}
+					
+				}
 		}catch(Exception e)
 		{
 			Assert.fail(e.toString());

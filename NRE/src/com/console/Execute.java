@@ -79,7 +79,7 @@ public class Execute {
 		TestNG tng = new TestNG();
 		tng.setXmlSuites(suites);
 		//Place report inside cucumber-report/timestamp/TestNG-Report/
-		tng.setOutputDirectory(RunConfiguration.getProjectDir()+ StringConstants.ID_SEPARATOR+"testng-output");
+//		tng.setOutputDirectory(RunConfiguration.getProjectDir()+ StringConstants.ID_SEPARATOR+"testng-output");
 		tng.run();
 		
 		System.out.println("here");

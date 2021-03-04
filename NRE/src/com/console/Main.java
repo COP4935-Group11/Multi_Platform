@@ -34,7 +34,7 @@ public class Main {
 	 
      //static final String COMMAND = "-testSuitePath=\"Test Suites/Smoke\" -executionProfile=\"default\" -projectPath=\"/home/richard89/Documents/Sebastian-2-master/PCTE-Similar1\" -browserType=\"Chrome\"";
      //static final String COMMAND = "-projectPath=F:\\000\\PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome(headless)";
-     static final String COMMAND = "-projectPath=/home/richard89/Documents/new/Sebastian-2-master2/Sebastian-2-master/PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome(headless)";
+     static final String COMMAND = "-projectPath=/Users/sebastiangilarranz/Desktop/Sebastian-2/PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome";
      
 	 static HashMap<Variables, String> variables = new HashMap<>();
 	 

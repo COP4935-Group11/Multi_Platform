@@ -12,7 +12,6 @@
 	<classpathentry kind="lib" path="lib/org.apache.commons.lang3_3.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/org.apiguardian_1.1.0.v20190826-0900.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.core.resources_3.11.1.v20161107-2032.jar"/>
-	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.141.59.jar"/>
 	<classpathentry kind="lib" path="lib/testng-6.11.jar"/>
 	<classpathentry kind="lib" path="lib/JUnit/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
 	<classpathentry kind="lib" path="lib/JUnit/org.junit_4.13.0.v20200204-1500.jar"/>
@@ -107,5 +106,7 @@
 	<classpathentry kind="lib" path="lib/Cucumber/io.cucumber.junit_3.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/Cucumber/io.cucumber.tag-expressions_1.1.1.jar"/>
 	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
+	<classpathentry kind="lib" path="/Users/sebastiangilarranz/Desktop/Multi_Platform/NRE/lib/selenium-server-standalone-3.141.59.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.141.59.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
