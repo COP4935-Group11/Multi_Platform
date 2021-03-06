@@ -1,0 +1,65 @@
+import com.ucf.pcte.CucumberKW
+import com.ucf.pcte.gold.WebUI as WebUI
+import static com.ucf.pcte.gold.WebUI.findTestObject
+import cucumber.api.java.en.*
+import com.ucf.pcte.CSVData
+import com.constants.CSVSeparator
+import com.configuration.RunConfiguration
+import internal.GlobalVariable
+import com.constants.*
+import hooks.TestSupport
+import hooks.SharedTestData
+
+
+
+// Run the feature file
+CucumberKW.runFeatureFile('Include/features/Content-Content-Authoring/uploadDocumentsToTrainingPackage.feature')
+
+
+def setup()
+{
+   // Store parameters for test
+   SharedTestData data = SharedTestData.getInstance()
+   data.addTestParam("testCode", test_code)
+   data.addTestParam("contentModuleToUse", use_content_module_named)
+   data.addTestParam("trainingPackageToUse", use_training_package_named)
+   
+   // Create support test data if running standalone (otherwise, a test suite that would make it)
+   TestSupport support = TestSupport.getInstance()
+   if (!support.isInTestSuite())
+   {
+      // Login as author
+      support.login(GlobalVariable.author_username, GlobalVariable.author_password, GlobalVariable.author_key)
+
+      // Make a content module and training package to use
+      data.createContentModule(use_content_module_named)
+      data.createTrainingPackage(use_training_package_named, use_content_module_named)
+   
+      // And finally logout
+      support.logout()
+   }
+}
+
+
+def teardown()
+{
+   // First, make sure we are logged out from any left over user
+   TestSupport support = TestSupport.getInstance()
+   support.logout()
+  
+   // Clean-up test data if running standalone (otherwise, a test suite will do it)
+   if (!support.isInTestSuite())
+   {
+      // Login as orgadmin, remove training package documents, and logout
+      support.login(GlobalVariable.orgadmin_username, GlobalVariable.orgadmin_password, GlobalVariable.orgadmin_key)
+      SharedTestData data = SharedTestData.getInstance()
+      data.deleteTrainingPackageDocuments(use_training_package_named)
+      support.logout()
+      
+      // Then, login as author, remove training package & content module, and logout
+      support.login(GlobalVariable.author_username, GlobalVariable.author_password, GlobalVariable.author_key)
+      data.deleteTrainingPackage(use_training_package_named)
+      data.deleteContentModule(use_content_module_named)
+      support.logout()
+   }
+}
