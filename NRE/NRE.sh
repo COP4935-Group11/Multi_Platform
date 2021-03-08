@@ -71,12 +71,3 @@ sudo chmod +x ${dir}nre;
 
 
 
-
-#Delete the temp Folder
-#if [ -d "/${PROJECT_FOLDER}/temp" ]; then
-#  sudo rm -R /${PROJECT_FOLDER}/temp
-#fi
-###########################################
-
-#export DISPLAY=:2
-#Xvfb $DISPLAY -ac &

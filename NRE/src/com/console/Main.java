@@ -35,8 +35,20 @@ public class Main {
      //static final String COMMAND = "-testSuitePath=\"Test Suites/Smoke\" -executionProfile=\"default\" -projectPath=\"/home/richard89/Documents/Sebastian-2-master/PCTE-Similar1\" -browserType=\"Chrome\"";
      //static final String COMMAND = "-projectPath=F:\\000\\PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome(headless)";
      //static final String COMMAND = "-projectPath=/home/richard89/Documents/new/Sebastian-2-master2/Sebastian-2-master/PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome(headless)";
-     static final String COMMAND = "-projectPath=/home/richard89/Downloads/scripts/PCTE Tests -testSuitePath=\"Test Suites/9001-9500 Smoke/S9001 All Smoke Tests\" -browserType=Chrome(headless)";
+     static final String COMMAND = "-projectPath=/home/richard89/Downloads/scripts/PCTE Tests -testSuitePath=\"Test Suites/9001-9500 Smoke/S9001 All Smoke Tests\" -browserType=Chrome(headless) -executionProfile=\"RCS01 PROD01\"";
 	 
+     static final String LOGO = "******************WELCOME TO******************\n"
+     						  + "##         ##   ############    #############\n"
+     						  + "###        ##   ##         ##   ##           \n"
+     						  + "## ##      ##   ##         ##   ##           \n"
+     						  + "##  ##     ##   ##        ##    ##           \n"
+     						  + "##   ##    ##   ##########      ###########  \n"
+     						  + "##    ##   ##   ##       ##     ##           \n"
+     						  + "##     ##  ##   ##        ##    ##           \n"
+     						  + "##      ## ##   ##         ##   ##           \n"
+     						  + "##       ####   ##          ##  #############\n"
+     						  + "********The new runtime engine for PCTE*******\n";
+     
     		 static HashMap<Variables, String> variables = new HashMap<>();
 	 
 	 
@@ -57,7 +69,7 @@ public class Main {
 		Scanner in = new Scanner(System.in);	
 		Boolean quit = Boolean.FALSE;
 		
-		System.out.println("Welcome to NRE. The new runtime engine for Katalon Studio.");
+		System.out.println(LOGO);
 		
 		while(!quit) {
 			
@@ -228,6 +240,7 @@ public class Main {
 				System.out.println("ERROR: Project path does not exist!");
 				flag++;
 			}
+			//-------------------------------------------------------------------------
 			
 			//validate PROFILE
 			if(variables.get(Variables.PROFILE_VAR) == null)

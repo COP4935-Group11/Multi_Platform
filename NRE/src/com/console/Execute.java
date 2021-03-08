@@ -88,8 +88,6 @@ public class Execute {
 //		tng.setOutputDirectory(RunConfiguration.getProjectDir()+ StringConstants.ID_SEPARATOR+"testng-output");
 		tng.run();
 		
-		System.out.println("here");
-		
 		try {
 			Merger.main(new String[] {"-i=" + reportDir,"-o=" + RunConfiguration.getReportDir() + StringConstants.ID_SEPARATOR + sdf.format(today)  + StringConstants.XML_EXT, "-s=Smoke"});
 		} catch (Exception e) {
