@@ -40,7 +40,7 @@ public class TestData {
 		switch (type)
 		{
 			case "CSV":
-				return getCSVData(column, row);
+				return getCSVData(column - 1, row);
 				
 			default:
 				break;
@@ -63,7 +63,7 @@ public class TestData {
 		switch (type)
 		{
 			case "CSV":
-				return getCSVData(column, row);
+				return getCSVData(String.valueOf(Integer.valueOf(column)-1), row);
 				
 			default:
 				break;
