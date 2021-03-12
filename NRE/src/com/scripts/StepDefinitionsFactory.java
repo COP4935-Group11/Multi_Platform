@@ -1,6 +1,7 @@
 package com.scripts;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import java.nio.file.Files;
@@ -69,7 +70,7 @@ public class StepDefinitionsFactory {
 		listOfScripts = getScriptFiles();
 		
 		listOfSteps = new ArrayList<>();
-		//System.out.println(listOfScripts.size()); debugging mode
+		//System.out.println(listOfScripts.size()); //debugging mode
 		
 		String className = null;
 		String scriptSource = null;
@@ -115,28 +116,13 @@ public class StepDefinitionsFactory {
 
 		ArrayList<File> scripts = new ArrayList<>();
 
-		String folder = RunConfiguration.getProjectDir() + StringConstants.SCRIPTS_SOURCE;
-		File fld = new File(folder);
-
+		//String folder = RunConfiguration.getProjectDir() + StringConstants.SCRIPTS_SOURCE;
+		File folder = new File(RunConfiguration.getProjectDir() + StringConstants.SCRIPTS_SOURCE);
+	
 		//System.out.println(fld.toString()); //debugging mode
-
-		while(fld.isDirectory()) {
-
-			File[] ls = fld.listFiles();
-
-			for(File file : ls) {
-
-				if(!file.getName().contains(StringConstants.CUSTOM_ATTRIBUTES_FILE))
-					if(!file.isDirectory()) {
-						scripts.add(file);
-						fld = file;
-					}
-					else
-						fld = file;
-			}
-
-		}
-
+	
+			readFolder(folder, scripts);
+			
 		return scripts;
 	}
 
@@ -208,7 +194,8 @@ public class StepDefinitionsFactory {
 			if(isSharedTestData)
 				tsFlag = Boolean.TRUE;
 			
-		}
+		}else
+			imports.set(0, StringConstants.DEFAULT_SCRIPTS_PACKAGE);
 		
 		script.addAll(imports);
 		
@@ -239,8 +226,9 @@ public class StepDefinitionsFactory {
 							
 		sourceCode = String.join(StringConstants.NEW_LINE, script);
 		
+		//System.out.println(StringConstants.ROOT_DIR + StringConstants.SCRIPTS_FOLDER);
 			
-		new File(StringConstants.ROOT_DIR + StringConstants.ID_SEPARATOR + StringConstants.SCRIPTS_FOLDER).mkdirs();
+		new File(StringConstants.ROOT_DIR + StringConstants.SCRIPTS_FOLDER).mkdirs();
 
 		//System.out.println(StringConstants.ROOT_DIR + StringConstants.SCRIPTS_FOLDER 
 		//		+ StringConstants.ID_SEPARATOR + rootScript.getName());
@@ -301,6 +289,38 @@ public class StepDefinitionsFactory {
 	    return clazz;
 	}
 	
-	
+	private static void readFolder(File folder, ArrayList<File> scripts) {
+		
+			//create filters for iterating folders and files
+			FileFilter folderFilter = new FileFilter() {
+	            @Override
+	            public boolean accept(File pathname) {
+	               return pathname.isDirectory();
+	            }
+	         };
+	         FileFilter fileFilter = new FileFilter() {
+		            @Override
+		            public boolean accept(File pathname) {
+		               return pathname.isFile();
+		            }
+		         };
+		         
+		    //Verify if there are any files in the folder
+	         File[] lsFiles = folder.listFiles(fileFilter);
+	       //Verify if the folder contains nested folders
+	         File[] ls = folder.listFiles(folderFilter);
+	         
+	         	         
+	         //copy the files first (to handle hooks properly)
+	         for(int i = 0; i < lsFiles.length; i++) {
+	        	 if(!lsFiles[i].getName().contains(StringConstants.CUSTOM_ATTRIBUTES_FILE))
+						scripts.add(lsFiles[i]);
+	         }
+	         
+	         //if there are any containing folder, repeat the recursion
+	         if(ls.length > 0)
+	        	 readFolder(ls[0], scripts);
+	         
+	}
 
 }

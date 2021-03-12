@@ -37,6 +37,8 @@ public class GlobalVars{
                     e.printStackTrace();
                 }
             }
+            
+            System.out.println(selectedVariables);
             return selectedVariables;
         } catch (Exception ex) {
             System.out.println("Could not create global variable.");

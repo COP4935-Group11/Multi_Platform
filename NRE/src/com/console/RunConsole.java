@@ -34,9 +34,10 @@ public class RunConsole {
 			
 			FeaturesFactory.copyFeatures();
 			StepDefinitionsFactory.copyScripts();
-			
-			DirectoryUtils.copyDirectory(StringConstants.ROOT_DIR+StringConstants.ID_SEPARATOR+StringConstants.TEMP_COMPILED_STEPS_FOLDER,
+			if(new File(StringConstants.ROOT_DIR+StringConstants.ID_SEPARATOR+StringConstants.TEMP_COMPILED_STEPS_FOLDER).exists())
+				DirectoryUtils.copyDirectory(StringConstants.ROOT_DIR+StringConstants.ID_SEPARATOR+StringConstants.TEMP_COMPILED_STEPS_FOLDER,
 										StringConstants.ROOT_DIR+StringConstants.ID_SEPARATOR+StringConstants.COMPILED_STEPS_FOLDER);
+			if(new File("internal").exists())
 			DirectoryUtils.deleteDirectory("com");
 			DirectoryUtils.deleteDirectory("hooks");
 				
@@ -71,7 +72,7 @@ public class RunConsole {
 		
 		
 		try {
-						
+			
 			cleanProject();
 			
 		} catch (IOException e) {
@@ -91,7 +92,7 @@ public class RunConsole {
 		DirectoryUtils.deleteDirectory("features");
 		DirectoryUtils.deleteDirectory("bin"+StringConstants.ID_SEPARATOR+"com"+StringConstants.ID_SEPARATOR+"stepdefinitions");
 		DirectoryUtils.deleteDirectory("bin"+StringConstants.ID_SEPARATOR+"hooks");
-		//DirectoryUtils.deleteDirectory("temp");
+		DirectoryUtils.deleteDirectory("temp");
 		DirectoryUtils.deleteDirectory("bin"+StringConstants.ID_SEPARATOR+"internal");
 							
 	}
