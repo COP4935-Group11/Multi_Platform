@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.codehaus.groovy.control.CompilationUnit;
@@ -19,13 +20,19 @@ import org.codehaus.groovy.tools.GroovyClass;
 import com.configuration.RunConfiguration;
 import com.constants.StringConstants;
 import com.util.DirectoryUtils;
-import com.console.Main;
-import groovy.lang.GroovyClassLoader;
 
 
 
 
 public class StepDefinitionsFactory {
+	
+	static class Script{
+		
+		File script;
+		Boolean changed;
+		
+	}
+		
 
 	private static final String TESTSUPPORT_IMP = "import hooks.TestSupport";
 	private static final String SHAREDTESTDATA_IMP = "import hooks.SharedTestData";
@@ -47,8 +54,8 @@ public class StepDefinitionsFactory {
 											"import java.awt.datatransfer.StringSelection",
 											"import java.awt.event.KeyEvent"));;
 											
-	private static ArrayList<File> listOfScripts = null;
-	public static ArrayList<File> listOfSteps = null;
+	private static LinkedList<Script> listOfScripts = null;
+	//private static ArrayList<File> listOfSteps = null;
 		
 	private static ArrayList<String> imports;
 
@@ -67,63 +74,83 @@ public class StepDefinitionsFactory {
 											IOException, ClassNotFoundException {
 
 		Boolean flag = Boolean.FALSE;
-		listOfScripts = getScriptFiles();
+		Boolean flag2 = Boolean.FALSE;
+		listOfScripts = new LinkedList<>();
 		
-		listOfSteps = new ArrayList<>();
-		//System.out.println(listOfScripts.size()); //debugging mode
+		//listOfSteps = new ArrayList<>();
+		
 		
 		String className = null;
 		String scriptSource = null;
+		File tempFile = null;
+		Script tempScript = null;
 		
 		
-		for(int i = 0; i < listOfScripts.size(); i++) {
-
+		getScriptFiles();
+		
+		//System.out.println(listOfScripts.size()); //debugging mode
+		
+		while(!listOfScripts.isEmpty()) {
 
 			//String temp = getScript(listOfScripts.get(i));	//debugging mode
 			//System.out.println(temp);	//debugging mode
 
-			listOfSteps.add(i, getScript(listOfScripts.get(i)));
+			//listOfSteps.add(i, getScript(listOfScripts.get(i)));
+			tempScript = createScript(listOfScripts.getFirst().script);
+			tempFile = getScript(listOfScripts.getFirst().script);
 			
-			String name = listOfSteps.get(i).getName().replace(StringConstants.GROOVY_EXT, "");
+			String name = tempFile.getName().replace(StringConstants.GROOVY_EXT, "");
 			
 			if(name.contains("TestSupport") || name.contains("SharedTestData")) { 
 				flag = Boolean.TRUE;
-				className = StringConstants.HOOKS+ "." + listOfSteps.get(i).getName().replace(StringConstants.GROOVY_EXT, "");
+				className = StringConstants.HOOKS+ "." + name;
 				 
 			}else
-				className = StringConstants.STEP_DEFS_GLUE + "." + listOfSteps.get(i).getName().replace(StringConstants.GROOVY_EXT, "");
+				className = StringConstants.STEP_DEFS_GLUE + "." + name;
 			
 			
-			scriptSource = String.join(StringConstants.NEW_LINE ,readLines(listOfSteps.get(i)));
+			scriptSource = String.join(StringConstants.NEW_LINE ,readLines(tempFile));
 			
 			//System.out.println(scriptSource);
+			try {
 			
-			 compileGroovyScript(className, scriptSource);
+				compileGroovyScript(className, scriptSource);
 			 
+			}catch(Exception e) {
+				
+				listOfScripts.removeFirst();
+				tempScript.changed = Boolean.TRUE;
+				listOfScripts.add(1, tempScript);
+				flag = Boolean.FALSE;
+				flag2 = Boolean.TRUE;
+			}
 			 if(flag) {
 				
 				 DirectoryUtils.copyDirectory("hooks", "bin"+StringConstants.ID_SEPARATOR+"hooks");
 			 }
 				 
-										
+				
+			 if(!flag2) {
+				 listOfScripts.removeFirst();
+			 }
 		}
 		
 		
 	}
 	
 
-	private static ArrayList<File> getScriptFiles() {
+	private static void  getScriptFiles() {
 
-		ArrayList<File> scripts = new ArrayList<>();
+		//ArrayList<File> scripts = new ArrayList<>();
 
 		//String folder = RunConfiguration.getProjectDir() + StringConstants.SCRIPTS_SOURCE;
 		File folder = new File(RunConfiguration.getProjectDir() + StringConstants.SCRIPTS_SOURCE);
 	
 		//System.out.println(fld.toString()); //debugging mode
 	
-			readFolder(folder, scripts);
+			readFolder(folder);
 			
-		return scripts;
+		//return scripts;
 	}
 
 	static File getScript(File rootScript) throws IOException {
@@ -271,25 +298,7 @@ public class StepDefinitionsFactory {
 
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public static Class getGroovyScript(final String className, String script) {
-	    Class clazz = null;
-
-	    try (GroovyClassLoader classLoader = new GroovyClassLoader(Main.getRootClassLoader())) {
-	        clazz = classLoader.parseClass(script, className);
-	                	          
-	        //classLoader.addClasspath(className);
-	        
-	        
-	        
-	    } catch (IOException e) {
-	    } catch (Exception e) {
-	    }
-
-	    return clazz;
-	}
-	
-	private static void readFolder(File folder, ArrayList<File> scripts) {
+	private static void readFolder(File folder) {
 		
 			//create filters for iterating folders and files
 			FileFilter folderFilter = new FileFilter() {
@@ -298,6 +307,7 @@ public class StepDefinitionsFactory {
 	               return pathname.isDirectory();
 	            }
 	         };
+	         
 	         FileFilter fileFilter = new FileFilter() {
 		            @Override
 		            public boolean accept(File pathname) {
@@ -314,13 +324,34 @@ public class StepDefinitionsFactory {
 	         //copy the files first (to handle hooks properly)
 	         for(int i = 0; i < lsFiles.length; i++) {
 	        	 if(!lsFiles[i].getName().contains(StringConstants.CUSTOM_ATTRIBUTES_FILE))
-						scripts.add(lsFiles[i]);
+						listOfScripts.addLast(createScript(lsFiles[i]));
 	         }
 	         
 	         //if there are any containing folder, repeat the recursion
 	         if(ls.length > 0)
-	        	 readFolder(ls[0], scripts);
+	        	 readFolder(ls[0]);
 	         
 	}
+	
+	public static Script createScript(File file) {
+		
+		Script newScript = new Script();
+		
+		newScript.script = file;
+		newScript.changed = Boolean.FALSE;
+		
+		return newScript; 
+	}
+	
+	public static Script createScript(File file, Boolean c) {
+		
+		Script newScript = new Script();
+		
+		newScript.script = file;
+		newScript.changed = c;
+		
+		return newScript; 
+	}
+	
 
 }

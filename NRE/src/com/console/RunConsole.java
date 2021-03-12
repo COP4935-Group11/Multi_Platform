@@ -101,10 +101,10 @@ public class RunConsole {
 	private static void setTempFiles() {
 		
 		
-		for(File file : StepDefinitionsFactory.listOfSteps) {
+		/*for(File file : StepDefinitionsFactory.listOfScripts) {
 			
 			file.deleteOnExit();
-		}
+		}*/
 	
 		for(File file : FeaturesFactory.listOfNewFeatures) {
 	
