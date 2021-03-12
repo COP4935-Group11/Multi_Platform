@@ -1,6 +1,8 @@
 package com.ucf.pcte;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 import com.configuration.RunConfiguration;
@@ -9,6 +11,7 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 
 
 public class TestData {
@@ -40,7 +43,7 @@ public class TestData {
 		switch (type)
 		{
 			case "CSV":
-				return getCSVData(column - 1, row);
+				return getCSVData(column, row);
 				
 			default:
 				break;
@@ -63,7 +66,7 @@ public class TestData {
 		switch (type)
 		{
 			case "CSV":
-				return getCSVData(String.valueOf(Integer.valueOf(column)-1), row);
+				return getCSVData(column, row);
 				
 			default:
 				break;
@@ -88,7 +91,14 @@ public class TestData {
 		  
 		        List<String[]> allData = csvReader.readAll();
 		        
-		        return allData.get(row)[column];
+//		        for(String[] strings: allData)
+//		        {
+//		        	for(String string: strings )
+//		        	{
+//		        		System.out.println(string);
+//		        	}
+//		        }
+		        return allData.get(row)[column-1];
 		        
 		 }catch(Exception e)
 		 {
@@ -114,6 +124,13 @@ public class TestData {
 		        List<String[]> allData = csvReader.readAll();
 		        
 		        
+//		        for(String[] strings: allData)
+//		        {
+//		        	for(String string: strings )
+//		        	{
+//		        		System.out.println(string);
+//		        	}
+//		        }
 		        
 //		        System.out.println("**"+allData.get(row)[getColumnIndex(column,allData)]);
 		        return allData.get(row)[getColumnIndex(column,allData)];
@@ -141,6 +158,32 @@ public class TestData {
 		
 		
 		return 0;
+	}
+	
+	public int getRowNumbers()
+	{
+		FileReader filereader = null;
+		try {
+			filereader = new FileReader(path);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		  
+        CSVParser parser = new CSVParserBuilder().withSeparator(',').build(); 
+   
+        CSVReader csvReader = new CSVReaderBuilder(filereader) 
+                                  .withCSVParser(parser) 
+                                  .build(); 
+        List<String[]> allData = null;
+        try {
+			allData = csvReader.readAll();
+		} catch (IOException | CsvException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		return allData.size();
 	}
 
 }

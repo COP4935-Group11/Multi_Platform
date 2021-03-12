@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [TmpSuite]">
+  <test name="Register(failed)">
+    <parameter name="path" value="temp/Scripts/Register/Script1611241895950.groovy"/>
+    <classes>
+      <class name="com.console.RunScript">
+        <methods>
+          <include name="runScript" invocation-numbers="0"/>
+          <include name="TearDown"/>
+          <include name="SetUp"/>
+        </methods>
+      </class> <!-- com.console.RunScript -->
+    </classes>
+  </test> <!-- Register(failed) -->
+</suite> <!-- Failed suite [TmpSuite] -->

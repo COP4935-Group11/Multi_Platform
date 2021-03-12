@@ -32,11 +32,9 @@ public class Main {
 	 static final String BROWSER = "browserType";
      static final String REPORT = "reportFolder";
 	 
-     //static final String COMMAND = "-testSuitePath=\"Test Suites/Smoke\" -executionProfile=\"default\" -projectPath=\"/home/richard89/Documents/Sebastian-2-master/PCTE-Similar1\" -browserType=\"Chrome\"";
-     //static final String COMMAND = "-projectPath=F:\\000\\PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome(headless)";
-     static final String COMMAND = "-projectPath=/home/richard89/Documents/new/Sebastian-2-master2/Sebastian-2-master/PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome";
-     //static final String COMMAND = "-projectPath=/home/richard89/Downloads/scripts/PCTE Tests -testSuitePath=\"Test Suites/9001-9500 Smoke/S9001 All Smoke Tests\" -browserType=Chrome(headless) -executionProfile=\"Authentication\"";
-	 
+     
+     static final String COMMAND = "-projectPath=/Users/sebastiangilarranz/Desktop/Sebastian-2/PCTE-Similar1 -testSuitePath=Smoke -browserType=Chrome";
+//     static final String COMMAND = "-projectPath=/media/psf/Home/Desktop/new_prj/PCTE -testSuitePath=Test Suites/9001-9500 Smoke/S9001 All Smoke Tests -browserType=Firefox -executionProfile=Authentication";
      static final String LOGO = "******************WELCOME TO******************\n"
      						  + "##         ##   ############    #############\n"
      						  + "###        ##   ##         ##   ##           \n"
